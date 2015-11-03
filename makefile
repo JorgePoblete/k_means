@@ -1,3 +1,5 @@
+src=./src
+build=./build
 OBJ=Kmeans.o utils.o main.o
 INCLUDES=
 CC=g++
@@ -8,20 +10,32 @@ DFLAGS=
 
 $(VERBOSE).SILENT:
 
-all: kmeans
+all: ref
 	rm -f *.o
 
-Kmeans.o: Kmeans.cpp
-	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) Kmeans.cpp
+ref.o: $(src)/1.ref/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/1.ref/*.cpp
 
-utils.o: utils.cpp
-	$(CC) $(OBJFLAGS) $(CCFLAGS) utils.cpp
-	
-main.o: main.cpp
-	$(CC) $(OBJFLAGS) $(CCFLAGS) $(INCLUDES) main.cpp
+ref: ref.o $(OBJ)
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/ref
 
-kmeans: $(OBJ)
-	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o Kmeans
+align.o: $(src)/2.align/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/2.align/*.cpp
+
+align: align.o $(OBJ)
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/align
+
+vector.o: $(src)/3.vector/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/3.vector/*.cpp
+
+vector: vector.o $(OBJ)
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/vector
+
+base.o: $(src)/4.base/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/4.base/*.cpp
+
+base: base.o $(OBJ)
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/base
 
 clean:
-	rm -f *.o Kmeans
+	rm -f *.o ./build/*
