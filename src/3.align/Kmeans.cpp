@@ -71,6 +71,9 @@ int Kmeans::estep(double *points, double *centroids, int k, int n, int d)
 }
 void Kmeans::mstep(double *points, double *centroids, int k, int n, int d)
 {
+	__assume_aligned(points, 64);
+	__assume_aligned(centroids, 64);
+	__assume_aligned(new_centroids, 64);
 	for (int x=0; x<n; x++)
 	{
 		int c = membership[x];

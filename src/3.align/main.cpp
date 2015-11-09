@@ -36,11 +36,13 @@ int main(int argc, char** argv)
     utils.stop_timer("kmeans");
     std::cout << "Tiempo kmeans total: " << utils.get_total_time("kmeans") << std::endl;
 
+/*
     for (int i=0; i<k;i++)
     {
         for (int j=0; j<d; j++)
             std::cout << means[i*d+j] << " ";
         std::cout << std::endl;
     }
+*/
     return 0;
 }
