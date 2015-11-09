@@ -16,26 +16,33 @@ all: ref
 ref.o: $(src)/1.ref/*
 	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/1.ref/*.cpp
 
-ref: ref.o $(OBJ)
+ref: ref.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/ref
 
-align.o: $(src)/2.align/*
-	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/2.align/*.cpp
+em.o: $(src)/2.em/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/2.em/*.cpp
 
-align: align.o $(OBJ)
+em: em.o
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/em
+
+
+align.o: $(src)/3.align/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/3.align/*.cpp
+
+align: align.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/align
 
-vector.o: $(src)/3.vector/*
-	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/3.vector/*.cpp
+vector.o: $(src)/4.vector/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/4.vector/*.cpp
 
-vector: vector.o $(OBJ)
+vector: vector.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/vector
 
-base.o: $(src)/4.base/*
-	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/4.base/*.cpp
+parallel.o: $(src)/5.parallel/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(INCLUDES) $(src)/5.parallel/*.cpp
 
-base: base.o $(OBJ)
-	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/base
+parallel: parallel.o
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(INCLUDES) -o $(build)/parallel
 
 clean:
 	rm -f *.o ./build/*

@@ -34,14 +34,6 @@ int main(int argc, char** argv)
             means[i][j] = data[i][j];
         }
     }
-
-    for (int i=0; i<k;i++)
-    {
-        for (int j=0; j<d; j++)
-            std::cout << means[i][j] << " ";
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
     Utils utils;
     utils.start_timer("kmeans");
     Kmeans kmeans(data,means,t,k,n,d);
