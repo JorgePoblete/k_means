@@ -5,6 +5,11 @@
 #include <cmath>
 #include "utils.hpp"
 
+
+#ifndef ALIGN_SIZE
+    #define ALIGN_SIZE 64
+#endif
+
 class Kmeans
 {
 public:

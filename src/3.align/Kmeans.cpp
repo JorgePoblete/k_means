@@ -3,9 +3,9 @@
 Kmeans::Kmeans(double *points, double *centroids, int t, int k, int n, int d)
 {
 	Utils utils;
-	membership = (int *) malloc (sizeof(int)*n);
-	counter = (int *) malloc (sizeof(int)*k);
-	new_centroids = (double *) _mm_malloc (sizeof(double)*k*d,64);
+	membership = (int *) malloc (sizeof(int) * n);
+	counter = (int *) malloc (sizeof(int) * k);
+	new_centroids = (double *) _mm_malloc (sizeof(double) * k * d, ALIGN_SIZE);
 
 	int changed;
 	do
@@ -42,8 +42,8 @@ int Kmeans::estep(double *points, double *centroids, int k, int n, int d)
 {
 	int changed = 0, kmin;
 	double dmin,dist;
-	__assume_aligned(points, 64);
-	__assume_aligned(centroids, 64);
+	__assume_aligned(points, ALIGN_SIZE);
+	__assume_aligned(centroids, ALIGN_SIZE);
 	for (int x=0; x<n; x++)
 	{
 		dmin = 99e99;
@@ -71,9 +71,9 @@ int Kmeans::estep(double *points, double *centroids, int k, int n, int d)
 }
 void Kmeans::mstep(double *points, double *centroids, int k, int n, int d)
 {
-	__assume_aligned(points, 64);
-	__assume_aligned(centroids, 64);
-	__assume_aligned(new_centroids, 64);
+	__assume_aligned(points, ALIGN_SIZE);
+	__assume_aligned(centroids, ALIGN_SIZE);
+	__assume_aligned(new_centroids, ALIGN_SIZE);
 	for (int x=0; x<n; x++)
 	{
 		int c = membership[x];
