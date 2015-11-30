@@ -12,20 +12,13 @@ Kmeans::Kmeans(double **points, double **centroids, int t, int k, int n, int d)
 	do
 	{
 		utils.start_timer("iteration");
-		//reinitialization of variables
-		for (int i=0; i<k; i++)
-		{
-			for (int j=0; j<d; j++)
-				new_centroids[i][j] = 0.0;
-			counter[i] = 0;
-		}
 
 		utils.start_timer("estep");
-		changed = estep(points, centroids, k, n, d);
+		changed = assign_step(points, centroids, k, n, d);
 		utils.stop_timer("estep");
 
 		utils.start_timer("mstep");
-		mstep(points, centroids, k, n, d);
+		update_step(points, centroids, k, n, d);
 		utils.stop_timer("mstep");
 
 		utils.stop_timer("iteration");
@@ -39,37 +32,54 @@ Kmeans::Kmeans(double **points, double **centroids, int t, int k, int n, int d)
 	std::cout << "Tiempo iteracion total: " << utils.get_total_time("iteration") << std::endl;
 }
 
-int Kmeans::estep(double **points, double **centroids, int k, int n, int d)
+int Kmeans::assign_step(double **points, double **centroids, int k, int n, int d)
 {
 	int changed = 0, kmin;
-	double dmin,dist;
 	for (int x=0; x<n; x++)
 	{
-		dmin = 99e99;
-		kmin = 0;
-		for (int c=0; c<k; c++)
-		{
-			//euclid distance on a d-dimensional space
-			dist = 0.0;
-			for (int m=0; m<d; m++)
-			{
-				dist += (points[x][m]-centroids[c][m]) * (points[x][m]-centroids[c][m]);
-			}
-			dist = sqrt(dist);
-			if (dmin > dist)
-			{
-				dmin = dist;
-				kmin = c;
-			}
-		}
+		kmin = asignar(points[x], centroids, k, d);
 		if (membership[x] != kmin)
 			changed = changed + 1;
 		membership[x] = kmin;
 	}
 	return changed;
 }
-void Kmeans::mstep(double **points, double **centroids, int k, int n, int d)
+int Kmeans::asignar(double *point, double **centroids, int k, int d)
 {
+	int kmin;
+  	double dmin,dist;
+	dmin = 99e99;
+	kmin = 0;
+	for (int c=0; c<k; c++)
+	{
+		dist = euclidian_distance(point, centroids[c], d);
+		if (dmin > dist)
+		{
+			dmin = dist;
+			kmin = c;
+		}
+	}
+	return kmin;
+}
+double Kmeans::euclidian_distance(double *point, double *centroid, int d)
+{
+	double dist = 0.0;
+	for (int m=0; m<d; m++)
+	{
+		dist += (point[m]-centroid[m]) * (point[m]-centroid[m]);
+	}
+	dist = sqrt(dist);
+	return dist;
+}
+void Kmeans::update_step(double **points, double **centroids, int k, int n, int d)
+{
+	//reinitialization of variables
+	for (int i=0; i<k; i++)
+	{
+		for (int j=0; j<d; j++)
+			new_centroids[i][j] = 0.0;
+		counter[i] = 0;
+	}
 	for (int x=0; x<n; x++)
 	{
 		int c = membership[x];
