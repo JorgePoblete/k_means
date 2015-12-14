@@ -46,5 +46,18 @@ parallel.o: $(src)/5.parallel/*
 parallel: parallel.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/parallel
 
+
+task.o: $(src)/6.task/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) $(src)/6.task/*.cpp
+
+task: task.o
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/task
+
+offload.o: $(src)/7.offload/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) $(src)/7.offload/*.cpp
+
+offload: offload.o
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/offload
+
 clean:
 	rm -f *.o* ./build/*
