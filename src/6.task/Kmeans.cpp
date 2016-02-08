@@ -40,15 +40,13 @@ int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 		for (int x=0; x<n; x+=TASK_SIZE)
 		{
 			#pragma omp task
+			for (int i=x; i<x+TASK_SIZE && i<n; i++)
 			{
-				for (int i=x; i<x+TASK_SIZE && i<n; i++)
-				{
-					kmin = asignar(points + (i * d), centroids, k, d);
-					if (membership[i] != kmin)
-						#pragma omp atomic
-						changed = changed + 1;
-					membership[i] = kmin;
-				}
+				kmin = asignar(points + (i * d), centroids, k, d);
+				if (membership[i] != kmin)
+					#pragma omp atomic
+					changed = changed + 1;
+				membership[i] = kmin;
 			}
 		}
 	}

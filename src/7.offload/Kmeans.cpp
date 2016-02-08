@@ -6,6 +6,10 @@ Kmeans::Kmeans(double *points, double *centroids, int t, int k, int n, int d)
 	membership = (int *) _mm_malloc (sizeof(int) * n, ALIGN_SIZE);
 	counter = (int *) _mm_malloc (sizeof(int) * k, ALIGN_SIZE);
 	new_centroids = (double *) _mm_malloc (sizeof(double) * k * d, ALIGN_SIZE);
+	//mic memory management
+	#pragma offload_transfer target(mic:0) \
+	nocopy(points: ALLOC length(TASK_SIZE*d)) \
+	nocopy(centroids: ALLOC length(k*d))
 
 	int changed;
 	do
@@ -34,12 +38,34 @@ Kmeans::Kmeans(double *points, double *centroids, int t, int k, int n, int d)
 int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 {
 	int changed = 0, kmin;
+
+	//centroids must be updated on mic side for each loop
+	#pragma offload_transfer target(mic:0) \
+	in(centroids: REUSE length(k*d))
+
 	#pragma omp parallel
 	{
 		#pragma omp for nowait
 		for (int x=0; x<n; x+=TASK_SIZE)
 		{
 			#pragma omp task
+			if (omp_get_thread_num() == MIC_THREAD)
+			{
+				#pragma offload target(mic:0) \
+				in(points[x:TASK_SIZE*d]: REUSE)
+				{
+					#pragma omp parallel for schedule(static)
+					for (int i=x; i<x+TASK_SIZE && i<n; i++)
+					{
+						kmin = asignar(points + (i * d), centroids, k, d);
+						if (membership[i] != kmin)
+							#pragma omp atomic
+							changed = changed + 1;
+						membership[i] = kmin;
+					}
+				}
+			}
+			else
 			{
 				for (int i=x; i<x+TASK_SIZE && i<n; i++)
 				{
