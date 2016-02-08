@@ -52,7 +52,7 @@ int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 			if (omp_get_thread_num() == MIC_THREAD)
 			{
 				#pragma offload target(mic:0) \
-				in(points[x:TASK_SIZE*d]: REUSE) \
+				in(points[x:x+TASK_SIZE*d]: REUSE) \
 				nocopy(centroids: REUSE length(k*d))
 				{
 					//#pragma omp parallel for schedule(static)
