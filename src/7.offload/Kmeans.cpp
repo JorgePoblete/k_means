@@ -98,6 +98,7 @@ int Kmeans::asignar(double *point, double *centroids, int k, int d)
 	}
 	return kmin;
 }
+__attribute__((target(mic)))
 double Kmeans::euclidian_distance(double *point, double *centroid, int d)
 {
 	__assume_aligned(point, ALIGN_SIZE);

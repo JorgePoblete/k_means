@@ -29,7 +29,7 @@ public:
 private:
 	int assign_step(double *points, double *centroids, int k, int n, int d);
     __attribute__((target(mic))) int asignar(double *point, double *centroids, int k, int d);
-	double euclidian_distance(double *point, double *centroid, int d);
+    __attribute__((target(mic))) double euclidian_distance(double *point, double *centroid, int d);
 	void update_step(double *points, double *centroids, int k, int n, int d);
 };
 #endif
