@@ -54,7 +54,7 @@ int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 				#pragma offload target(mic:0) \
 				in(points[x:TASK_SIZE*d]: REUSE)
 				{
-					#pragma omp parallel for schedule(static)
+					//#pragma omp parallel for schedule(static)
 					for (int i=x; i<x+TASK_SIZE && i<n; i++)
 					{
 						kmin = asignar(points + (i * d), centroids, k, d);
@@ -80,6 +80,7 @@ int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 	}
 	return changed;
 }
+__attribute__((target(mic)))
 int Kmeans::asignar(double *point, double *centroids, int k, int d)
 {
 	int kmin;
