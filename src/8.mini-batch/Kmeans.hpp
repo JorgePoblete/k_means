@@ -24,9 +24,9 @@ class Kmeans
 {
 public:
 	int * membership, * counter, k, n, d;
-	double * points, * centroids, * new_centroids;
+	double * points, * centroids, * mini_batch;
 	int * mic_signal, * mic_membership;
-	Kmeans(double *points, double *centroids, int t, int k, int n, int d);
+	Kmeans(double *points, double *centroids, int t, int b, int k, int n, int d);
 private:
 	int assign_step(double *points, double *centroids, int k, int n, int d);
     __attribute__((target(mic))) int asignar(double *point, double *centroids, int k, int d);

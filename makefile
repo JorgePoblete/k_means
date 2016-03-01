@@ -27,7 +27,6 @@ em.o: $(src)/2.em/*
 em: em.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/em
 
-
 align.o: $(src)/3.align/*
 	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) $(src)/3.align/*.cpp
 
@@ -58,6 +57,12 @@ offload.o: $(src)/7.offload/*
 
 offload: offload.o
 	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/offload
+
+mini-batch.o: $(src)/8.mini-batch/*
+	$(CC) $(OBJFLAGS) $(CCFLAGS) $(DFLAGS) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) $(src)/8.mini-batch/*.cpp
+
+mini-batch: mini-batch.o
+	$(CC) $(CCFLAGS) $(OBJ) $(LDLIBS) $(OPT) $(OPTFLAGS) $(INCLUDES) -o $(build)/mini-batch
 
 clean:
 	rm -f *.o* ./build/*
