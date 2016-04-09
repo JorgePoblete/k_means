@@ -55,7 +55,7 @@ int Kmeans::assign_step(double *points, double *centroids, int k, int n, int d)
 	#pragma offload target(mic:0) \
 	in(centroids[0:k*d] : REUSE into(centroids[0:k*d])) \
 	in(points : REUSE length(0)) \
-	in(mic_membership : REUSE length(TASK_SIZE*TASK_TO_MIC)) \
+	in(mic_membership : REUSE length(0)) \
 	signal(mic_signal)
 	{
 		#pragma omp parallel for schedule(static) private(kmin)
